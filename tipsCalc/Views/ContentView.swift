@@ -13,15 +13,18 @@ struct ContentView: View {
     
     @State private var currency = 0
     
+    @State private var percents = [0, 0.05, 0.1, 0.15, 0.2, 0.25]
+    @State private var selectedPercent = 0
+    
     var body: some View {
         VStack {
-            VStack {
+            VStack { //Sum
                 Spacer()
                 HStack {
                     TextField("123.50", text: $money)
                         .frame(width: calculateWidth(text: money))
                         .font(.system(size: 50))
-                        
+                    
                     Text(currency == 0 ? "$" : currency == 1 ? "₴" : "€")
                         .onTapGesture {
                             if currency != 2 {
@@ -42,8 +45,47 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.bottom)
                     .frame(height: UIScreen.main.bounds.height * 0.7)
                     .foregroundColor(.bg)
+                
+                VStack {
+                    
+                    VStack {
+                        VStack {
+                            HStack {
+                                Text("Выберите процент чаевых")
+                                    .foregroundColor(.black.opacity(0.5))
+                                    .font(.title3)
+                                Spacer()
+                            }
+                            .padding(.horizontal)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack {
+                                    ForEach(0..<percents.count) { percent in
+                                        Button {
+                                            selectedPercent = percent
+                                        } label: {
+                                            ZStack {
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .foregroundColor(selectedPercent == percent ? .green : .white)
+                                                    .frame(height: 50)
+                                                    
+                                                Text("\(Int(percents[percent] * 100))%")
+                                                    .font(.title)
+                                                    .padding(.horizontal, 15)
+                                                    .foregroundColor(selectedPercent == percent ? .white : .green)
+                                            }
+                                            .frame(height: 75)
+                                            .padding(.horizontal, 5)
+                                        }
+                                        
+                                    }
+                                }
+
+                            }
+                        } //percentOfTips
+                    }
+                }
             } //BG
-        } //Sum
+        }
     }
     
     func calculateWidth(text: String) -> CGFloat {
@@ -61,15 +103,6 @@ struct ContentView: View {
         return max(minWidth, min(textWidth + 3, maxWidth))
     }
     
-}
-
-extension String {
-    func widthOfString(usingFont font: UIFont) -> CGFloat {
-        let fontAttrinbutes = [NSAttributedString.Key.font: font]
-        let size = self.size(withAttributes: fontAttrinbutes)
-        
-        return size.width
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {
