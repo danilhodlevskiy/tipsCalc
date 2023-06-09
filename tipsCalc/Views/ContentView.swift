@@ -16,13 +16,17 @@ struct ContentView: View {
     @State private var percents = [0, 0.05, 0.1, 0.15, 0.2, 0.25]
     @State private var selectedPercent = 0
     
+    @State private var countOfPeople = ""
+    @State private var countOfPeopleStep = 1
+    
+    
     var body: some View {
         VStack {
             VStack { //Sum
                 Spacer()
                 HStack {
                     TextField("123.50", text: $money)
-                        .frame(width: calculateWidth(text: money))
+                        .frame(width: calculateWidth(text: money, minWidthIfTextIsEmpty: 175, minWindth: 0, maxWidth: 250, fontSize: 50))
                         .font(.system(size: 50))
                     
                     Text(currency == 0 ? "$" : currency == 1 ? "₴" : "€")
@@ -82,23 +86,82 @@ struct ContentView: View {
 
                             }
                         } //percentOfTips
+                        
+                        VStack {
+                            HStack {
+                                Text("Кол-во друзей")
+                                    .foregroundColor(.black.opacity(0.5))
+                                    .font(.title3)
+                                    
+                                Spacer()
+                            }
+                            .padding(.horizontal, 15)
+                            
+                            HStack {
+                                TextField("\(countOfPeopleStep)", text: $countOfPeople)
+                                    .font(.system(size: 50))
+                                    .foregroundColor(.green)
+                                    .fontWeight(.semibold)
+                                    .frame(width: calculateWidth(text: countOfPeople, minWidthIfTextIsEmpty: 65, minWindth: 65, maxWidth: 100, fontSize: 35))
+                                    
+                                
+                                HStack {
+                                    ZStack {
+                                        Circle()
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.green)
+                                        Button {
+                                            countOfPeopleStep += 1
+                                            countOfPeople = "\(countOfPeopleStep)"
+                                            
+                                        } label: {
+                                            Text("+")
+                                                .foregroundColor(.white)
+                                        }
+                                    }
+                                    
+                                    ZStack {
+                                        Circle()
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.green)
+                                        Button {
+                                            if countOfPeopleStep != 1 {
+                                                countOfPeopleStep -= 1
+                                                countOfPeople = "\(countOfPeopleStep)"
+                                            }
+                                            
+                                        } label: {
+                                            Text("-")
+                                                .foregroundColor(.white)
+                                        }
+                                    }
+                                }
+                                
+                                
+
+                                
+                            }
+                            .padding(.horizontal, 25)
+                            
+                            
+                        }
                     }
                 }
             } //BG
         }
     }
     
-    func calculateWidth(text: String) -> CGFloat {
+    func calculateWidth(text: String, minWidthIfTextIsEmpty: CGFloat, minWindth: CGFloat, maxWidth: CGFloat, fontSize: CGFloat) -> CGFloat {
         var minWidth: CGFloat {
             if text.isEmpty {
-                return 175
+                return minWidthIfTextIsEmpty
             }
             else {
-                return 0
+                return minWindth
             }
         }
-        let maxWidth: CGFloat = 250
-        let textWidth = text.widthOfString(usingFont: .systemFont(ofSize: 50))
+        let maxWidth: CGFloat = maxWidth
+        let textWidth = text.widthOfString(usingFont: .systemFont(ofSize: fontSize))
         
         return max(minWidth, min(textWidth + 3, maxWidth))
     }
