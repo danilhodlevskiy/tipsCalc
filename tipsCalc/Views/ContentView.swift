@@ -19,135 +19,169 @@ struct ContentView: View {
     @State private var countOfPeople = ""
     @State private var countOfPeopleStep = 1
     
+    @State private var showResult = false
+    
+    @State private var result: Double = 0
+    
     
     var body: some View {
-        VStack {
-            VStack { //Sum
-                Spacer()
-                HStack {
-                    TextField("123.50", text: $money)
-                        .frame(width: calculateWidth(text: money, minWidthIfTextIsEmpty: 175, minWindth: 0, maxWidth: 250, fontSize: 50))
-                        .font(.system(size: 50))
-                    
-                    Text(currency == 0 ? "$" : currency == 1 ? "₴" : "€")
-                        .onTapGesture {
-                            if currency != 2 {
-                                currency += 1
-                            } else {
-                                currency = 0
+        ZStack {
+            VStack {
+                VStack { //Sum
+                    Spacer()
+                    HStack {
+                        TextField("123.50", text: $money)
+                            .frame(width: calculateWidth(text: money, minWidthIfTextIsEmpty: 175, minWindth: 0, maxWidth: 250, fontSize: 50))
+                            .font(.system(size: 50))
+                        
+                        Text(currency == 0 ? "$" : currency == 1 ? "₴" : "€")
+                            .onTapGesture {
+                                if currency != 2 {
+                                    currency += 1
+                                } else {
+                                    currency = 0
+                                }
                             }
-                        }
-                        .font(.system(size: 50))
-                        .offset(CGSize(width: money.isEmpty ? -25 : -7, height: 0))
+                            .font(.system(size: 50))
+                            .offset(CGSize(width: money.isEmpty ? -25 : -7, height: 0))
+                    }
+                    .offset(CGSize(width: 10, height: 0))
+                    Spacer(minLength: 70)
                 }
-                .offset(CGSize(width: 10, height: 0))
-                Spacer(minLength: 70)
-            }
-            Spacer()
-            ZStack {
-                RoundedRectangle(cornerRadius: 25)
-                    .edgesIgnoringSafeArea(.bottom)
-                    .frame(height: UIScreen.main.bounds.height * 0.7)
-                    .foregroundColor(.bg)
-                
-                VStack {
+                Spacer()
+                ZStack {
+                    RoundedRectangle(cornerRadius: 25)
+                        .edgesIgnoringSafeArea(.bottom)
+                        .frame(height: UIScreen.main.bounds.height * 0.7)
+                        .foregroundColor(.bg)
                     
                     VStack {
                         VStack {
-                            HStack {
-                                Text("Выберите процент чаевых")
-                                    .foregroundColor(.black.opacity(0.5))
-                                    .font(.title3)
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-                            ScrollView(.horizontal, showsIndicators: false) {
+                            VStack {
                                 HStack {
-                                    ForEach(0..<percents.count) { percent in
-                                        Button {
-                                            selectedPercent = percent
-                                        } label: {
-                                            ZStack {
-                                                RoundedRectangle(cornerRadius: 15)
-                                                    .foregroundColor(selectedPercent == percent ? .green : .white)
-                                                    .frame(height: 50)
-                                                    
-                                                Text("\(Int(percents[percent] * 100))%")
-                                                    .font(.title)
-                                                    .padding(.horizontal, 15)
-                                                    .foregroundColor(selectedPercent == percent ? .white : .green)
+                                    Text("Выберите процент чаевых")
+                                        .foregroundColor(.black.opacity(0.5))
+                                        .font(.title3)
+                                    Spacer()
+                                }
+                                .padding(.horizontal)
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack {
+                                        ForEach(0..<percents.count) { percent in
+                                            Button {
+                                                selectedPercent = percent
+                                            } label: {
+                                                ZStack {
+                                                    RoundedRectangle(cornerRadius: 15)
+                                                        .foregroundColor(selectedPercent == percent ? .green : .white)
+                                                        .frame(height: 50)
+                                                        
+                                                    Text("\(Int(percents[percent] * 100))%")
+                                                        .font(.title)
+                                                        .padding(.horizontal, 15)
+                                                        .foregroundColor(selectedPercent == percent ? .white : .green)
+                                                }
+                                                .frame(height: 75)
+                                                .padding(.horizontal, 5)
                                             }
-                                            .frame(height: 75)
-                                            .padding(.horizontal, 5)
+                                            
+                                        }
+                                    }
+
+                                }
+                            } //percentOfTips
+                            
+                            VStack {
+                                HStack {
+                                    Text("Кол-во друзей")
+                                        .foregroundColor(.black.opacity(0.5))
+                                        .font(.title3)
+                                        
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 15)
+                                
+                                HStack {
+                                    TextField("\(countOfPeopleStep)", text: $countOfPeople)
+                                        .font(.system(size: 50))
+                                        .foregroundColor(.green)
+                                        .fontWeight(.semibold)
+                                        .frame(width: calculateWidth(text: countOfPeople, minWidthIfTextIsEmpty: 65, minWindth: 65, maxWidth: 100, fontSize: 35))
+                                        
+                                    
+                                    HStack {
+                                        ZStack {
+                                            Circle()
+                                                .frame(width: 40, height: 40)
+                                                .foregroundColor(.green)
+                                            Button {
+                                                countOfPeopleStep += 1
+                                                countOfPeople = "\(countOfPeopleStep)"
+                                                
+                                            } label: {
+                                                Text("+")
+                                                    .foregroundColor(.white)
+                                            }
+                                        }
+                                        
+                                        ZStack {
+                                            Circle()
+                                                .frame(width: 40, height: 40)
+                                                .foregroundColor(.green)
+                                            Button {
+                                                if countOfPeopleStep != 1 {
+                                                    countOfPeopleStep -= 1
+                                                    countOfPeople = "\(countOfPeopleStep)"
+                                                }
+                                                
+                                            } label: {
+                                                Text("-")
+                                                    .foregroundColor(.white)
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 25)
+                                
+                                Spacer()
+                                
+                                Button {
+                                    
+                                    if let countOfPeople = Int(countOfPeople) {
+                                        if let money = Double(money) {
+                                            let forOnePersonWithoutTips = money / Double(countOfPeople)
+                                            
+                                            result = Double(forOnePersonWithoutTips) + (forOnePersonWithoutTips * Double(percents[selectedPercent]))
                                         }
                                         
                                     }
-                                }
-
-                            }
-                        } //percentOfTips
-                        
-                        VStack {
-                            HStack {
-                                Text("Кол-во друзей")
-                                    .foregroundColor(.black.opacity(0.5))
-                                    .font(.title3)
                                     
-                                Spacer()
-                            }
-                            .padding(.horizontal, 15)
-                            
-                            HStack {
-                                TextField("\(countOfPeopleStep)", text: $countOfPeople)
-                                    .font(.system(size: 50))
-                                    .foregroundColor(.green)
-                                    .fontWeight(.semibold)
-                                    .frame(width: calculateWidth(text: countOfPeople, minWidthIfTextIsEmpty: 65, minWindth: 65, maxWidth: 100, fontSize: 35))
-                                    
-                                
-                                HStack {
+                                    showResult = true
+                                } label: {
                                     ZStack {
-                                        Circle()
-                                            .frame(width: 40, height: 40)
+                                        RoundedRectangle(cornerRadius: 15)
                                             .foregroundColor(.green)
-                                        Button {
-                                            countOfPeopleStep += 1
-                                            countOfPeople = "\(countOfPeopleStep)"
-                                            
-                                        } label: {
-                                            Text("+")
-                                                .foregroundColor(.white)
-                                        }
+                                            .frame(width: 150, height: 50)
+                                        Text("Подсчитать")
+                                            .font(.title3)
+                                            .foregroundColor(.white)
+                                            .bold()
                                     }
                                     
-                                    ZStack {
-                                        Circle()
-                                            .frame(width: 40, height: 40)
-                                            .foregroundColor(.green)
-                                        Button {
-                                            if countOfPeopleStep != 1 {
-                                                countOfPeopleStep -= 1
-                                                countOfPeople = "\(countOfPeopleStep)"
-                                            }
-                                            
-                                        } label: {
-                                            Text("-")
-                                                .foregroundColor(.white)
-                                        }
-                                    }
                                 }
-                                
-                                
+                                .padding(.bottom, 30)
 
                                 
+                                
                             }
-                            .padding(.horizontal, 25)
-                            
-                            
                         }
                     }
-                }
-            } //BG
+                    .padding(.top, 50)
+                } //BG
+            }
+            
+            ResultView(showResult: $showResult, currency: currency, result: result)
+                .offset(CGSize(width: 0, height: showResult ? 0 : UIScreen.main.bounds.height))
         }
     }
     
