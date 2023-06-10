@@ -21,7 +21,7 @@ struct ResultView: View {
                     .foregroundColor(.green)
                     .frame(width: 350, height: 500)
                 VStack {
-                    Text("На каждого человека")
+                    Text("На кожну людину")
                         .foregroundColor(.bg)
                         .font(.title2)
                         .fontWeight(.semibold)
@@ -56,7 +56,7 @@ struct ResultView: View {
                         RoundedRectangle(cornerRadius: 25)
                             .frame(width: 175, height: 50)
                             .foregroundColor(.bg)
-                        Text("Пересчитать")
+                        Text("Перерахувати")
                             .font(.title2)
                             .foregroundColor(.green)
                     }

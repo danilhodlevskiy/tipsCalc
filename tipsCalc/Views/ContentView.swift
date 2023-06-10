@@ -17,7 +17,7 @@ struct ContentView: View {
     @State private var selectedPercent = 0
     
     @State private var countOfPeople = ""
-    @State private var countOfPeopleStep = 1
+    @State private var countOfPeopleStep = 2
     
     @State private var showResult = false
     
@@ -59,7 +59,7 @@ struct ContentView: View {
                         VStack {
                             VStack {
                                 HStack {
-                                    Text("Выберите процент чаевых")
+                                    Text("Оберіть процент чайових")
                                         .foregroundColor(.black.opacity(0.5))
                                         .font(.title3)
                                     Spacer()
@@ -93,7 +93,7 @@ struct ContentView: View {
                             
                             VStack {
                                 HStack {
-                                    Text("Кол-во друзей")
+                                    Text("Кількість друзів")
                                         .foregroundColor(.black.opacity(0.5))
                                         .font(.title3)
                                         
@@ -162,7 +162,7 @@ struct ContentView: View {
                                         RoundedRectangle(cornerRadius: 15)
                                             .foregroundColor(.green)
                                             .frame(width: 150, height: 50)
-                                        Text("Подсчитать")
+                                        Text("Підрахувати")
                                             .font(.title3)
                                             .foregroundColor(.white)
                                             .bold()
@@ -179,9 +179,12 @@ struct ContentView: View {
                     .padding(.top, 50)
                 } //BG
             }
+            .blur(radius: showResult ? 100 : 0)
+            .animation(.default, value: showResult)
             
             ResultView(showResult: $showResult, currency: currency, result: result)
                 .offset(CGSize(width: 0, height: showResult ? 0 : UIScreen.main.bounds.height))
+                .animation(.easeInOut(duration: 0.5), value: showResult)
         }
     }
     
